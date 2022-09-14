@@ -1,26 +1,48 @@
-const getTodos = (resource, callback) => {
-    const request = new XMLHttpRequest();
+const getTodos = (resource) => {
 
-    request.addEventListener('readystatechange', () => {
-        //console.log(request, request.readyState);
-        if(request.readyState === 4 && request.status === 200){
-            const data = JSON.parse(request.responseText)
-            callback(undefined, data);
-        } else if(request.readyState === 4) {
-            callback('could not fetch data', undefined);
-        }
+    return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+
+        request.addEventListener('readystatechange', () => {
+            //console.log(request, request.readyState);
+            if(request.readyState === 4 && request.status === 200){
+                const data = JSON.parse(request.responseText)
+                resolve(data);
+            } else if(request.readyState === 4) {
+                reject('error getting resources');
+            }
+        });
+    
+        request.open('GET', resource);
+        request.send();
     });
 
-    request.open('GET', resource);
-    request.send();
 };
 
-getTodos('todos/addis.json', (err, data) => {
-    console.log(data);
-    getTodos('todos/newer.json', (err, data) => {
-        console.log(data);
-        getTodos('todos/nuovo.json', (err, data) => {
-            console.log(data);
-        });
-    });
+getTodos('todos/addiss.json').then(data => {
+    console.log('promise resolved:', data);
+}).catch((err) => {
+    console.log('promise rejected:', err);
 });
+
+//promise example
+
+// const getSomething = () => {
+
+//     return new Promise((resolve, reject) => {
+//         //fetch something
+//         //resolve('some data');
+//         reject('some error');
+//     });
+
+// };
+// getSomething().then((data) => {
+//     console.log(data);
+// }, (err) => {
+//     console.log(err);
+// });
+// getSomething().then(data => {
+//     console.log(data);
+// }).catch(err => {
+//     console.log(err);
+// });

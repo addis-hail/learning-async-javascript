@@ -19,8 +19,14 @@ const getTodos = (resource) => {
 
 };
 
-getTodos('todos/addiss.json').then(data => {
-    console.log('promise resolved:', data);
+getTodos('todos/addis.json').then(data => {
+    console.log('promise 1 resolved:', data);
+    return getTodos('todos/newer.json');
+}).then(data => {
+    console.log('promise 2 resolved:', data);
+    return getTodos('todos/nuovo.json');
+}).then(data => {
+    console.log('promise 3 resolved:', data);
 }).catch((err) => {
     console.log('promise rejected:', err);
 });
